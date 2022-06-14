@@ -24,4 +24,9 @@ public class Constants {
 	public static final String PLAYER_MODE_TWO_SPRITE = "";
 	public static final String PLAYER_MODE_THREE_SPRITE = "";
 
+	// obstacle images
+	public static final String SQUARE = "";
+	public static final String SPIKE = "";
+	public static final String DIAGONAL = "";
+
 }
