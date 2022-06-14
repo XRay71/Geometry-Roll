@@ -1,3 +1,5 @@
+package Assets.Classes;
+
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
@@ -7,9 +9,10 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-/* Sound class stores and plays sound files
- * Uses javax.sound.sampled.Clip and has four functions:
- * Play, Loop, Stop, and Set Volume
+/* 
+Ray Hang
+Date: June 15, 2022
+Sound class plays a pre-loaded sound file
  */
 
 public class Sound {
@@ -39,10 +42,10 @@ public class Sound {
 	public void stop() {
 		clip.stop();
 	}
-	
+
 	// Sets volume of the clip
 	public void setVolume(float volume) {
-	    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);        
-	    gainControl.setValue(20f * (float) Math.log10(volume));
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(20f * (float) Math.log10(volume));
 	}
 }
