@@ -29,7 +29,7 @@ public class Player extends Rectangle implements KeyListener {
     private double yPosition;
     private static BufferedImage spriteOne, spriteTwo, spriteThree, death;
 
-    // Constructor
+    // constructor
     public Player(double xPosition, double yPosition, int diameter, double verticalSpeed)
             throws IOException {
         super((int) Math.round(xPosition), (int) Math.round(yPosition), diameter, diameter);
@@ -43,10 +43,10 @@ public class Player extends Rectangle implements KeyListener {
         death = ImageIO.read(new File(Constants.PLAYER_MODE_THREE_SPRITE));
     }
 
-    // Setter function, sets the mode of the current Player
+    // setter function, sets the mode of the current Player
     public void setMode(int playerMode) {
 
-        // Wave mode has special movement
+        // wave mode has special movement
         if (playerMode == 2) {
             verticalSpeed = verticalSpeed > 0 ? Constants.GAME_SPEED : verticalSpeed == 0 ? 0 : -Constants.GAME_SPEED;
         }
@@ -54,43 +54,43 @@ public class Player extends Rectangle implements KeyListener {
         this.playerMode = playerMode;
     }
 
-    // Setter function, sets the diameter of the current Player (always a square)
+    // setter function, sets the diameter of the current Player (always a square)
     public void setdiameter(int diameter) {
         this.diameter = diameter;
     }
 
-    // Setter function, sets the horizontal speed of the current Player
-    // In fact, because the horizontal speed of the Player is the speed at which the
+    // setter function, sets the horizontal speed of the current Player
+    // in fact, because the horizontal speed of the Player is the speed at which the
     // game moves,
     // that's what it changes lol
     public void setHorizontalSpeed(int horizontalSpeed) {
         Constants.GAME_SPEED = horizontalSpeed;
     }
 
-    // Setter function, sets the vertical speed of the current Player
+    // setter function, sets the vertical speed of the current Player
     public void setVerticalSpeed(double verticalSpeed) {
         this.verticalSpeed = verticalSpeed;
     }
 
-    // Setter function, sets both coordinate speeds
+    // setter function, sets both coordinate speeds
     public void setSpeed(int horizontalSpeed, double verticalSpeed) {
         this.setHorizontalSpeed(horizontalSpeed);
         this.setVerticalSpeed(verticalSpeed);
     }
 
-    // Setter function, sets the current x position of the current Player
+    // setter function, sets the current x position of the current Player
     public void setXPosition(double xPosition) {
         this.xPosition = xPosition;
         this.x = (int) Math.round(xPosition);
     }
 
-    // Setter function, sets the current y position of the current Player
+    // setter function, sets the current y position of the current Player
     public void setYPosition(double yPosition) {
         this.yPosition = yPosition;
         this.y = (int) Math.round(yPosition);
     }
 
-    // Setter function, sets both coordinate positions of the current Player
+    // setter function, sets both coordinate positions of the current Player
     public void setPosition(double xPosition, double yPosition) {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -98,69 +98,69 @@ public class Player extends Rectangle implements KeyListener {
         this.y = (int) Math.round(yPosition);
     }
 
-    // Getter function, returns the current Player mode;
+    // getter function, returns the current Player mode;
     public int getPlayerMode() {
         return playerMode;
     }
 
-    // Getter function, returns the current diameter of the Player
+    // getter function, returns the current diameter of the Player
     public int getdiameter() {
         return diameter;
     }
 
-    // Getter function, returns if the Player is in double mode (MIGHT REMOVE)
+    // getter function, returns if the Player is in double mode (MIGHT REMOVE)
     public boolean isDoubleMode() {
         return doubleMode;
     }
 
-    // Getter function, returns the Player's horizontal position
+    // getter function, returns the Player's horizontal position
     public double[] getHorizontalPosition() {
         return new double[] { xPosition, x };
     }
 
-    // Getter function, returns the Player's vertical position
+    // getter function, returns the Player's vertical position
     public double[] getVerticalPosition() {
         return new double[] { yPosition, y };
     }
 
-    // Getter function, returns the Player's coordinate position
+    // getter function, returns the Player's coordinate position
     public double[][] getPosition() {
         return new double[][] { { xPosition, yPosition }, { x, y } };
     }
 
-    // Getter function, returns the Player's horizontal speed
+    // getter function, returns the Player's horizontal speed
     public double getHorizontalSpeed() {
         return Constants.GAME_SPEED;
     }
 
-    // Getter function, returns the Player's vertical speed
+    // getter function, returns the Player's vertical speed
     public double getVerticalSpeed() {
         return verticalSpeed;
     }
 
-    // Getter function, returns the Player's coordinate speeds
+    // getter function, returns the Player's coordinate speeds
     public double[] getSpeed() {
         return new double[] { Constants.GAME_SPEED, verticalSpeed };
     }
 
-    // Called continuously to update the position of the Player
-    // Also draws and checks collisions
+    // called continuously to update the position of the Player
+    // also draws and checks collisions
     public void update(Graphics g, int time) {
 
-        // The Player only moves if it's not dead
+        // the Player only moves if it's not dead
         if (playerMode != 3) {
             yPosition += verticalSpeed;
 
-            // Hitting the bottom
+            // hitting the bottom
             if (yPosition >= Constants.GAME_HEIGHT - diameter) {
                 yPosition = Constants.GAME_HEIGHT - diameter;
                 setVerticalSpeed(0);
                 hasJumped = false;
             }
-            // Hitting the top
+            // hitting the top
             else if (yPosition <= 0) {
 
-                // The Player dies if it's in roll mode
+                // the Player dies if it's in roll mode
                 if (playerMode == 0) {
                     playerMode = 3;
                     hasJumped = false;
@@ -170,19 +170,19 @@ public class Player extends Rectangle implements KeyListener {
 
                 setVerticalSpeed(0);
             }
-            // Gravity
+            // gravity
             else if (playerMode == 0 || (playerMode == 1 && !isMoving)) {
                 verticalSpeed -= Constants.GRAVITY;
             }
-            // Upwards movement
+            // upwards movement
             else if (playerMode == 1 && isMoving) {
                 verticalSpeed += Constants.GRAVITY;
             }
 
-            // Sets the position to be the updated one
+            // sets the position to be the updated one
             setYPosition(yPosition);
 
-            // Checks for collisions
+            // checks for collisions
             checkCollision();
         }
 
@@ -190,16 +190,16 @@ public class Player extends Rectangle implements KeyListener {
         draw(g, time);
     }
 
-    // Called continually from update, draws the Player
+    // called continually from update, draws the Player
     public void draw(Graphics g, int time) {
 
-        // Can't do rotations with Graphics lol, need Graphics2D
+        // can't do rotations with Graphics lol, need Graphics2D
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform originalTransform = g2d.getTransform();
         double theta;
         AffineTransform newTransform;
 
-        // Different angles depending on player mode
+        // different angles depending on player mode
         if (playerMode == 0 || playerMode == 3) {
             theta = normalizeAngle(-time / 360 * 2 * Math.PI);
         } else if (playerMode == 1) {
@@ -208,45 +208,45 @@ public class Player extends Rectangle implements KeyListener {
             theta = normalizeAngle(verticalSpeed > 0 ? Math.PI / 4 : verticalSpeed == 0 ? 0 : -Math.PI / 4);
         }
 
-        // Creates a new transformation to do this
+        // creates a new transformation to do this
         newTransform = AffineTransform.getRotateInstance(theta, xPosition + diameter / 2.0, yPosition + diameter / 2.0);
         g2d.setTransform(newTransform);
 
-        // If it's dead, do the death thing
+        // if it's dead, do the death thing
         if (playerMode == 3) {
             g2d.drawImage(death, x, y, diameter, diameter, null);
         }
-        // Otherwise, draw it normally
+        // otherwise, draw it normally
         else {
             g2d.drawImage(playerMode == 1 ? spriteOne : playerMode == 2 ? spriteTwo : spriteThree, x, y, null);
         }
 
-        // Resets transformation state
+        // resets transformation state
         g2d.setTransform(originalTransform);
     }
 
-    // Called continuously from update, checks for collisions
+    // called continuously from update, checks for collisions
     public void checkCollision() {
 
     }
 
-    // Helper function, returns angles in 0-2pi format
+    // helper function, returns angles in 0-2pi format
     private double normalizeAngle(double angle) {
         return (angle + 2 * Math.PI) % (2 * Math.PI);
     }
 
-    // Called when a key is pressed
+    // called when a key is pressed
     public void keyPressed(KeyEvent e) {
         isMoving = true;
 
-        // Makes Player jump if rolling mode
+        // makes Player jump if rolling mode
         if (playerMode == 0) {
             if (!hasJumped) {
                 setVerticalSpeed(10);
                 hasJumped = true;
             }
         }
-        // Makes Player move up if wave mode
+        // makes Player move up if wave mode
         else if (playerMode == 2) {
             if (!hasJumped) {
                 setVerticalSpeed(-Constants.GAME_SPEED);
@@ -255,18 +255,18 @@ public class Player extends Rectangle implements KeyListener {
         }
     }
 
-    // Called when a key is released
+    // called when a key is released
     public void keyReleased(KeyEvent e) {
         isMoving = false;
 
-        // Makes Player move down if wave mode
+        // makes Player move down if wave mode
         if (playerMode == 2) {
             setVerticalSpeed(Constants.GAME_SPEED);
             hasJumped = false;
         }
     }
 
-    // Need this because interface lol
+    // need this because interface lol
     public void keyTyped(KeyEvent e) {
     }
 
