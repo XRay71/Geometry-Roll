@@ -1,9 +1,18 @@
-/*
- * Ray Hang, Rain Yeyang
- * Date: June 16, 2022
- * Processing and moving obstacles, including blocks and spikes
- */
 
+/*
+ * Rain Yeyang, Ray Hang
+ * Date: June 21, 2022
+ * Processes and moves obstacles, including blocks and spikes
+ * Child of Rectangle
+ * Numbered as follows:
+ * 0: block []
+ * 1: upright spike /\
+ * 2: upside down spike \/
+ * 3: upright left triangle |\
+ * 4: upside down left triangle |/
+ * 5: upright right triangle /|
+ * 6: upside down right triangle \|
+ */
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,83 +20,103 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Obstacle extends Rectangle {
+
     private int obstacleType;
     private double xPosition;
     private double yPosition;
-    private boolean onScreen = false;
+    private boolean onScreen;
+    private boolean isGregg;
     private BufferedImage image;
 
     public Obstacle(int obstacleType, double xPosition, double yPosition) throws IOException {
+        // call superclass constructor
         super((int) Math.round(xPosition), (int) Math.round(yPosition), Constants.GRID_UNIT, Constants.GRID_UNIT);
+
+        // set variables
         this.obstacleType = obstacleType;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
-        this.image = ImageIO.read(new File(
-                obstacleType == 0 ? Constants.SQUARE
-                        : obstacleType == 1 ? Constants.UPRIGHT_SPIKE
-                                : obstacleType == 2 ? Constants.UPSIDE_DOWN_SPIKE
-                                        : obstacleType == 3 ? Constants.LEFT_UPRIGHT_DIAGONAL
-                                                : obstacleType == 4 ? Constants.LEFT_UPSIDE_DOWN_DIAGONAL
-                                                        : obstacleType == 5 ? Constants.RIGHT_UPRIGHT_DIAGONAL
-                                                                : Constants.RIGHT_UPSIDE_DOWN_DIAGONAL));
+        onScreen = false;
+        isGregg = false;
+
+        // read in image file
+        image = ImageIO.read(new File(Constants.OBSTACLES[obstacleType]));
     }
 
-    // setter function, sets the current x position of the current Obstacle
+    // setter functions of obstacle:
+
     public void setXPosition(double xPosition) {
+        // double value of x-coordinate
         this.xPosition = xPosition;
+        // integer value of x-coordinate
         this.x = (int) Math.round(xPosition);
     }
 
-    // setter function, sets the current y position of the current Obstacle
     public void setYPosition(double yPosition) {
+        // double value of y-coordinate
         this.yPosition = yPosition;
+        // integer value of x-coordinate
         this.y = (int) Math.round(yPosition);
     }
 
-    // setter function, sets both coordinate positions of the current Obstacle
     public void setPosition(double xPosition, double yPosition) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.x = (int) Math.round(xPosition);
-        this.y = (int) Math.round(yPosition);
+        setXPosition(xPosition);
+        setYPosition(yPosition);
     }
 
-    // getter function, returns the Obstacle's horizontal position
-    public double[] getHorizontalPosition() {
+    // getter functions of obstacle:
+
+    public double[] getXPosition() {
         return new double[] { xPosition, x };
     }
 
-    // getter function, returns the Obstacle's vertical position
-    public double[] getVerticalPosition() {
+    public double[] getYPosition() {
         return new double[] { yPosition, y };
     }
 
-    // getter function, returns the Obstacle's coordinate position
     public double[][] getPosition() {
         return new double[][] { { xPosition, yPosition }, { x, y } };
     }
 
-    // getter function, returns the Obstacle's horizontal speed
     public double getHorizontalSpeed() {
         return Constants.GAME_SPEED;
     }
 
-    // getter function, returns the obstacle type
     public int getObstacleType() {
         return obstacleType;
     }
 
+    public boolean isOnScreen() {
+        // whether obstacle has loaded
+        return onScreen;
+    }
+
     // called continuously
-    public void update(Graphics g) {
-        xPosition -= Constants.GAME_SPEED;
-        setXPosition(xPosition);
+    public void update(Graphics g) throws IOException {
+
+        if (Player.isGregg()) {
+            if (!isGregg && obstacleType != 7) {
+                image = ImageIO.read(new File(Constants.GREGGED[obstacleType]));
+            }
+            isGregg = true;
+        }
+        // move obstacle
+        setXPosition(xPosition - Constants.GAME_SPEED);
+
+        // obstacle should appear on screen
         if (xPosition <= Constants.GAME_WIDTH) {
             onScreen = true;
-        } else if (xPosition <= -Constants.GRID_UNIT) {
+        }
+
+        // flag whether obstacle is still on screen
+        if (xPosition <= -Constants.GRID_UNIT) {
             onScreen = false;
         }
-        if (onScreen)
+
+        // if the obstacle is on the screen, draw it
+        if (onScreen) {
             draw(g);
+        }
     }
 
     // same idea as in Player class

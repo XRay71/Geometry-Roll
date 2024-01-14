@@ -1,0 +1,20 @@
+2022-05-31 		General outline for Geometry Roll
+2022-06-01		Objects outline	
+2022-06-02		Set up VSCode / VSCode Live Share	
+2022-06-03		Main, GameFrame	
+2022-06-04		GamePanel	
+2022-06-05		Back to outline	
+2022-06-06		Back to outline, Constants	
+2022-06-07		RAY: Folder organization, RAIN: Design game theme
+2022-06-08		Create PNGs	
+2022-06-09		RAY: Audio, RAIN: Start Menu
+2022-06-10		RAY: Start Player, RAIN: Start Rules
+2022-06-13		RAY: Start Obstacle, RAIN: Background, ParallaxBackground, debug and finish Menu, Rules
+2022-06-14		RAY: Debug GamePanel, RAIN: Debug GamePanel, modify PNGs, design Level 1 (txt)
+2022-06-15	 	RAY: Debug GamePanel, ParallaxBackground, Obstacle, RAIN: Debug GamePanel, ParallaxBackground
+2022-06-16		Start collision detection, final PNGs, audio files
+2022-06-17		Debug collision detection, design levels 2 and 3, RAIN: Level 3 generator
+2022-06-18      Debug collision detection, finalize Player
+2022-06-19      Debug collision detection, RAY: MulticolorBackground, results page
+2022-06-20      Final revisions, The Gregg, Audio code, finish level 3
+2022-06-21		Reset text files (data to 0), submit Geometry Roll :D

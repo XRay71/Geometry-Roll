@@ -1,70 +1,48 @@
 /*
-Rain Yeyang
-Date: June 15, 2022
-Background image scroll class
-*/
-
-import java.awt.Canvas;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.io.IOException;
+ * Ray Hang, Rain Yeyang
+ * Date: June 21, 2022
+ * Makes background(s) parallax, as used in levels 1 and 2 of Geometry Roll
+ * Child of Rectangle
+ */
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.lang.Thread;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
-public class ParallaxBackground extends Canvas implements Runnable {
+public class ParallaxBackground extends Rectangle {
+	
+	private double xPosition;
+    private BufferedImage image;
 
-	// use two copies to continuously swap the background
-	private BufferedImage image;
-	private Background image1, image2;
+    public ParallaxBackground(String imageFile) throws IOException {
+        super(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
-	public ParallaxBackground(String imageFile) throws IOException {
-		// create first image centered (on screen)
-		image1 = new Background(0, 0, imageFile);
+		// create image file
+		image = ImageIO.read(new File(imageFile));
+    }
 
-		// position second image to the right of the first (off screen)
-		image2 = new Background(image1.getImageWidth(), 0, imageFile);
+    // setter function, sets the current x position of the current Obstacle
+    public void setXPosition(double xPosition) {
+        this.xPosition = xPosition;
+        this.x = (int) Math.round(xPosition);
+    }
 
-		// create individual thread
-		new Thread(this).start();
-		setVisible(true);
-	}
-
-	@Override
-	public void run() {
-		try {
-			while (true) {
-				// pause momentarily before continuing to scroll
-				Thread.sleep(1);
-				repaint();
-			}
-		} catch (Exception e) {
-			System.out.println(e);
+    // called continuously
+    public void update(Graphics g) {
+		
+        xPosition -= Constants.GAME_SPEED;
+		if (xPosition <= -image.getWidth()) {
+			xPosition = 0;
 		}
-	}
+        setXPosition(xPosition);
+		draw(g);
+    }
 
-	@Override
-	public void update(Graphics g) {
-		paint(g);
-	}
-
-	public void paint(Graphics g) {
-		Graphics2D g2D = (Graphics2D) g;
-
-		// check if background image does not exist
-		if (image == null) {
-			// create placeholder image
-			image = (BufferedImage) (createImage(getWidth(), getHeight()));
-		}
-
-		// buffer to draw to
-		Graphics buffer = image.createGraphics();
-
-		// draw both copies of the background image to the buffer
-		image1.draw(buffer);
-		image2.draw(buffer);
-
-		// draw image onto screen
-		g2D.drawImage(image, null, 0, 0);
-	}
+    // same idea as that of Player class
+    public void draw(Graphics g) {
+        g.drawImage(image, x, y, null);
+		g.drawImage(image, x + image.getWidth(), y, null);
+    }
 
 }
